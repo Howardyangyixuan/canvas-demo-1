@@ -9,23 +9,57 @@
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <div id="canvas"></div>
+    <canvas id="canvas"></canvas>
     <script>
+      //画线
+      let canvas = document.getElementById("canvas");
+      canvas.width = document.documentElement.clientWidth;
+      canvas.height = document.documentElement.clientHeight;
+
+      let painting = false;
+      canvas.onmousedown = (e) => {
+        painting = true;
+      };
+      canvas.onmouseup = (e) => {
+        painting = false;
+      };
       canvas.onmousemove = (e) => {
+        if (painting) {
+          // console.log(e);
+          let ctx = canvas.getContext("2d");
+          ctx.fillStyle = "yellow";
+          ctx.strokeStyle = "double";
+          let height = 4;
+          let width = 4;
+          let radius = 10;
+          // 画方块
+          // ctx.fillRect(
+          //   e.clientX - width / 2,
+          //   e.clientY - height / 2,
+          //   width,
+          //   height
+          // );
+
+          //画圆：必须要加 ctx.beginPath()
+          // 填充用ctx.fill();
+          // 描边用ctx.stroke();
+          ctx.beginPath();
+          // ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // 左眼
+          ctx.arc(
+            e.clientX,
+            e.clientY,
+            radius,
+            (Math.PI / 180) * 0,
+            (Math.PI / 180) * 360
+          );
+          ctx.fill();
+          ctx.stroke();
+        } else {
+          console.log("else");
+        }
         // console.log(e);
-        console.log(e.clientX);
-        console.log(e.clientY);
-        let div = document.createElement("div");
-        div.style.position = "absolute";
-        div.style.left = e.clientX + "px";
-        div.style.top = e.clientY + "px";
-        div.style.width = "6px";
-        div.style.height = "6px";
-        div.style.marginLeft = "-3px";
-        div.style.marginTop = "-3px";
-        div.style.background = "black";
-        div.style.borderRadius = "50%";
-        canvas.appendChild(div);
+        // console.log(e.clientX);
+        // console.log(e.clientY);
       };
     </script>
   </body>
