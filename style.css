@@ -1,3 +1,19 @@
 #canvas {
   display: block;
 }
+header {
+  /* position: relative; */
+}
+header > div {
+  /* position: absolute; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+}
+header > div {
+  margin: 5px 10px;
+}
+.index:hover {
+  background: grey;
+}
