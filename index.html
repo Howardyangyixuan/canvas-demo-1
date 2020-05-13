@@ -6,61 +6,95 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Y-y_x 画板</title>
     <link rel="stylesheet" href="cssreset.css" />
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <canvas id="canvas"></canvas>
     <script>
-      //画线
-      let canvas = document.getElementById("canvas");
+      //判断是否是触屏设备
+      function is_touch_device() {
+        var bool;
+        if ("ontouchstart" in window) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      //显示检测结果
+      // window.onload = function () {
+      //   if (is_touch_device()) {
+      //     alert("浏览器支持触屏");
+      //   } else {
+      //     alert("浏览器不支持触屏");
+      //   }
+      // };
+
+      //捕捉id=canvas的对象 两句效果一样
+      // let canvas = document.getElementById("canvas");
+      let canvas = document.querySelector("canvas");
       canvas.width = document.documentElement.clientWidth;
       canvas.height = document.documentElement.clientHeight;
-
+      let ctx = canvas.getContext("2d");
+      ctx.fillStyle = "yellow";
+      ctx.strokeStyle = "none";
+      let height = 4;
+      let width = 4;
+      let radius = 10;
       let painting = false;
-      canvas.onmousedown = (e) => {
-        painting = true;
-      };
-      canvas.onmouseup = (e) => {
-        painting = false;
-      };
-      canvas.onmousemove = (e) => {
-        if (painting) {
-          // console.log(e);
-          let ctx = canvas.getContext("2d");
-          ctx.fillStyle = "yellow";
-          ctx.strokeStyle = "double";
-          let height = 4;
-          let width = 4;
-          let radius = 10;
-          // 画方块
-          // ctx.fillRect(
-          //   e.clientX - width / 2,
-          //   e.clientY - height / 2,
-          //   width,
-          //   height
-          // );
-
-          //画圆：必须要加 ctx.beginPath()
-          // 填充用ctx.fill();
-          // 描边用ctx.stroke();
+      if (is_touch_device()) {
+        console.log("是触屏设别");
+        canvas.ontouchmove = (e) => {
           ctx.beginPath();
-          // ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // 左眼
           ctx.arc(
-            e.clientX,
-            e.clientY,
+            e.touches[0].clientX,
+            e.touches[0].clientY,
             radius,
             (Math.PI / 180) * 0,
             (Math.PI / 180) * 360
           );
           ctx.fill();
           ctx.stroke();
-        } else {
-          console.log("else");
-        }
-        // console.log(e);
-        // console.log(e.clientX);
-        // console.log(e.clientY);
-      };
+        };
+      } else {
+        canvas.onmousedown = (e) => {
+          painting = true;
+        };
+        canvas.onmouseup = (e) => {
+          painting = false;
+        };
+        canvas.onmousemove = (e) => {
+          if (painting) {
+            // console.log(e);
+            // 画方块
+            // ctx.fillRect(
+            //   e.clientX - width / 2,
+            //   e.clientY - height / 2,
+            //   width,
+            //   height
+            // );
+
+            //画圆：必须要加 ctx.beginPath()
+            // 填充用ctx.fill();
+            // 描边用ctx.stroke();
+            ctx.beginPath();
+            // ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // 左眼
+            ctx.arc(
+              e.clientX,
+              e.clientY,
+              radius,
+              (Math.PI / 180) * 0,
+              (Math.PI / 180) * 360
+            );
+            ctx.fill();
+            ctx.stroke();
+          } else {
+            console.log("else");
+          }
+          // console.log(e);
+          // console.log(e.clientX);
+          // console.log(e.clientY);
+        };
+      }
     </script>
   </body>
 </html>
