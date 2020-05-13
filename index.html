@@ -11,7 +11,7 @@
   <body>
     <canvas id="canvas"></canvas>
     <script>
-      //判断是否是触屏设备
+      //1.判断是否是触屏设备
       function is_touch_device() {
         var bool;
         if ("ontouchstart" in window) {
@@ -29,6 +29,7 @@
       //   }
       // };
 
+      //2.开始画图
       //捕捉id=canvas的对象 两句效果一样
       // let canvas = document.getElementById("canvas");
       let canvas = document.querySelector("canvas");
@@ -37,26 +38,63 @@
       let ctx = canvas.getContext("2d");
       ctx.fillStyle = "yellow";
       ctx.strokeStyle = "none";
-      let height = 4;
-      let width = 4;
+      ctx.lineWidth = 10;
+      ctx.lineCap = "round";
+      let height = 10;
+      let width = 10;
       let radius = 10;
       let painting = false;
+      let last;
+      let cnt = 0;
+      function drawLine(anythingWithClientXY1, anythingWithClientXY2) {
+        //画线必须加ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(
+          anythingWithClientXY1.clientX,
+          anythingWithClientXY1.clientY
+        );
+        ctx.lineTo(
+          anythingWithClientXY2.clientX,
+          anythingWithClientXY2.clientY
+        );
+        ctx.stroke();
+      }
+      function drawPoints(anythingWithClientXY) {
+        //画圆：必须要加 ctx.beginPath()
+        // 填充用ctx.fill();
+        // 描边用ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(
+          anythingWithClientXY.clientX,
+          anythingWithClientXY.clientY,
+          radius,
+          (Math.PI / 180) * 0,
+          (Math.PI / 180) * 360
+        );
+        ctx.fill();
+        ctx.stroke();
+      }
+      function drawRect(anythingWithClientXY) {
+        ctx.fillRect(
+          anythingWithClientXY.clientX - width / 2,
+          anythingWithClientXY.clientY - height / 2,
+          width,
+          height
+        );
+      }
       if (is_touch_device()) {
         console.log("是触屏设别");
+        canvas.ontouchstart = (e) => {
+          last = e.touches[0];
+        };
         canvas.ontouchmove = (e) => {
-          ctx.beginPath();
-          ctx.arc(
-            e.touches[0].clientX,
-            e.touches[0].clientY,
-            radius,
-            (Math.PI / 180) * 0,
-            (Math.PI / 180) * 360
-          );
-          ctx.fill();
-          ctx.stroke();
+          // drawPoints(e.touches[0]);
+          drawLine(last, e.touches[0]);
+          last = e.touches[0];
         };
       } else {
         canvas.onmousedown = (e) => {
+          last = e;
           painting = true;
         };
         canvas.onmouseup = (e) => {
@@ -66,27 +104,12 @@
           if (painting) {
             // console.log(e);
             // 画方块
-            // ctx.fillRect(
-            //   e.clientX - width / 2,
-            //   e.clientY - height / 2,
-            //   width,
-            //   height
-            // );
-
-            //画圆：必须要加 ctx.beginPath()
-            // 填充用ctx.fill();
-            // 描边用ctx.stroke();
-            ctx.beginPath();
-            // ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // 左眼
-            ctx.arc(
-              e.clientX,
-              e.clientY,
-              radius,
-              (Math.PI / 180) * 0,
-              (Math.PI / 180) * 360
-            );
-            ctx.fill();
-            ctx.stroke();
+            // drawRect(e);
+            // 画点
+            // drawPoints(e);
+            // 画线
+            drawLine(last, e);
+            last = e;
           } else {
             console.log("else");
           }
