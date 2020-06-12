@@ -95,6 +95,10 @@
       }
       if (is_touch_device()) {
         console.log("是触屏设别");
+        //禁止滚动
+        canvas.addEventListener("touchstart", (e) => {
+          e.preventDefault();
+        });
         canvas.ontouchstart = (e) => {
           last = e.touches[0];
         };
@@ -104,6 +108,9 @@
           last = e.touches[0];
         };
       } else {
+        canvas.addEventListener("wheel", (e) => {
+          e.preventDefault();
+        });
         canvas.onmousedown = (e) => {
           last = e;
           painting = true;

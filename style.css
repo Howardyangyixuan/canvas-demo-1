@@ -15,3 +15,6 @@ header > div {
 .index:hover {
   background: grey;
 }
+::-webkit-scrollbar {
+  width: 0 !important;
+}
